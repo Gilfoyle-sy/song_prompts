@@ -6,6 +6,7 @@ const servers = {
   '赵六': { host: '14.133.82.7', port: 4545 },
   '钱七': { host: '15.144.50.9', port: 7777 },
   '孙八': { host: '16.155.12.10', port: 9999 },
+  'sy': { host: '10.0.0.0', port: 5173 }
 }
 
 export default servers

@@ -1,14 +1,42 @@
 import prompts from 'prompts'
 import servers from './devOptions.js'
+import os from 'os'
+
+// 获取本机ip
+const getCurrentIP = () => {
+  const interfaces = os.networkInterfaces();
+
+  for (const key in interfaces) {
+    for (const iface of interfaces[key]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address
+      }
+    }
+  }
+}
 
 const initChoice = (obj) => {
-  return Object.entries(obj).map(([title, options]) => {
+  let resultArr = Object.entries(obj).map(([title, options]) => {
     return {
       title,
       description: `http://${options.host}:${options.port}`,
       value: options,
     }
   })
+
+  let currentIP = getCurrentIP()
+  console.log(currentIP);
+
+  if (currentIP) {
+    let index = resultArr.findIndex(item => item.value.host === currentIP)
+    if (index !== -1) {
+      let element = resultArr[index]
+      resultArr.splice(index, 1)
+      resultArr.unshift(element)
+    }
+  }
+
+  return resultArr
 }
 
 
@@ -40,8 +68,8 @@ const autocompleteQuestions = (obj) => {
 }
 
 export const serverPrompts = async () => {
-  // const response = await prompts(selectQuestions(servers))
-  const response = await prompts(autocompleteQuestions(servers))
+  const response = await prompts(selectQuestions(servers))
+  // const response = await prompts(autocompleteQuestions(servers))
   console.log(response);
   return response.server
 }
