@@ -9,10 +9,7 @@ import { serverPrompts } from './prompts/index.js'
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode }) => {
-  let serverOptions = {}
-  if (mode === 'development') {
-    serverOptions = await serverPrompts()
-  }
+  const serverOptions = mode === 'development' ? await serverPrompts() : {}
   return {
     plugins: [
       vue(),
